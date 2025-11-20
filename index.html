@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candle Cost Calculator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            font-family: 'Montserrat', sans-serif;
+            text-align: center;
+            color: #1e293b;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #475569;
+            margin-bottom: 40px;
+            font-size: 1em;
+            line-height: 1.6;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+        }
+        
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            color: #64748b;
+            font-size: 1.3em;
+            margin-bottom: 8px;
+            font-weight: 600;
+            border-bottom: 2px solid #64748b;
+            padding-bottom: 10px;
+        }
+        
+        .section-context {
+            color: #64748b;
+            font-size: 0.9em;
+            margin-bottom: 20px;
+            margin-top: 8px;
+            font-style: italic;
+        }
+        
+        .subsection {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .subsection:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .subsection-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 12px;
+            font-size: 1.05em;
+        }
+        
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        label {
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 0.95em;
+        }
+        
+        .input-context {
+            font-size: 0.82em;
+            color: #64748b;
+            margin-top: 4px;
+            line-height: 1.4;
+        }
+        
+        .cost-output {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f1f5f9;
+            border-radius: 6px;
+            color: #475569;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+        
+        input[type="number"], input[type="text"] {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        input[type="number"]:focus, input[type="text"]:focus {
+            outline: none;
+            border-color: #64748b;
+        }
+        
+        .add-item-btn {
+            background: #64748b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 500;
+            margin-top: 10px;
+            transition: background 0.3s;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .add-item-btn:hover {
+            background: #475569;
+        }
+        
+        .packaging-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .remove-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85em;
+            margin-top: 10px;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .remove-btn:hover {
+            background: #dc2626;
+        }
+        
+        .slider-container {
+            margin-top: 20px;
+        }
+        
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #e0e0e0;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #64748b;
+            cursor: pointer;
+        }
+        
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #64748b;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .slider-value {
+            text-align: center;
+            margin-top: 10px;
+            font-weight: 600;
+            color: #64748b;
+            font-size: 1.1em;
+        }
+        
+        .results {
+            background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+            padding: 30px;
+            border-radius: 12px;
+            color: white;
+            margin-top: 30px;
+        }
+        
+        .results h2 {
+            font-family: 'Montserrat', sans-serif;
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.8em;
+        }
+        
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .result-card {
+            background: rgba(255,255,255,0.15);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+        
+        .result-label {
+            font-size: 0.9em;
+            margin-bottom: 8px;
+            opacity: 0.9;
+        }
+        
+        .result-value {
+            font-size: 2em;
+            font-weight: 700;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .input-row {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🕯️ Candle Cost Calculator</h1>
+        <p class="subtitle">Calculate your candle costs and profits. Enter your costs for materials in bulk or per individual quantity if you know the specific amounts.</p>
+        
+        <!-- Materials Section -->
+        <div class="section">
+            <h2 class="section-title">Materials</h2>
+            
+            <div class="subsection">
+                <div class="subsection-title">Wax</div>
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="waxPrice">Price ($)</label>
+                        <input type="number" id="waxPrice" step="0.01" value="0" oninput="calculate()">
+                    </div>
+                    <div class="input-group">
+                        <label for="waxWeight">Weight (lbs)</label>
+                        <input type="number" id="waxWeight" step="0.01" value="0" oninput="calculate()">
+                    </div>
+                </div>
+                <div class="cost-output">Cost per oz: $<span id="waxPerOz">0.00</span> | Cost per candle: $<span id="waxPerCandle">0.00</span></div>
+            </div>
+            
+            <div class="subsection">
+                <div class="subsection-title">Vessels</div>
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="vesselPrice">Price ($)</label>
+                        <input type="number" id="vesselPrice" step="0.01" value="0" oninput="calculate()">
+                    </div>
+                    <div class="input-group">
+                        <label for="vesselQty">Quantity</label>
+                        <input type="number" id="vesselQty" value="0" oninput="calculate()">
+                    </div>
+                </div>
+                <div class="cost-output">Cost per vessel: $<span id="vesselPerUnit">0.00</span></div>
+            </div>
+            
+            <div class="subsection">
+                <div class="subsection-title">Wicks</div>
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="wickPrice">Price ($)</label>
+                        <input type="number" id="wickPrice" step="0.01" value="0" oninput="calculate()">
+                    </div>
+                    <div class="input-group">
+                        <label for="wickQty">Quantity</label>
+                        <input type="number" id="wickQty" value="0" oninput="calculate()">
+                    </div>
+                </div>
+                <div class="cost-output">Cost per wick: $<span id="wickPerUnit">0.00</span> | Cost per candle: $<span id="wickPerCandle">0.00</span></div>
+            </div>
+            
+            <div class="subsection">
+                <div class="subsection-title">Fragrance Oil</div>
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="foPrice">Price ($)</label>
+                        <input type="number" id="foPrice" step="0.01" value="0" oninput="calculate()">
+                    </div>
+                    <div class="input-group">
+                        <label for="foOunces">Ounces</label>
+                        <input type="number" id="foOunces" step="0.1" value="0" oninput="calculate()">
+                    </div>
+                </div>
+                <div class="cost-output">Cost per oz: $<span id="foPerOz">0.00</span> | Cost per candle: $<span id="foPerCandle">0.00</span></div>
+            </div>
+            
+            <div class="subsection">
+                <div class="subsection-title">Lids</div>
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="lidPrice">Price ($)</label>
+                        <input type="number" id="lidPrice" step="0.01" value="0" oninput="calculate()">
+                    </div>
+                    <div class="input-group">
+                        <label for="lidQty">Quantity</label>
+                        <input type="number" id="lidQty" value="0" oninput="calculate()">
+                    </div>
+                </div>
+                <div class="cost-output">Cost per lid: $<span id="lidPerUnit">0.00</span></div>
+            </div>
+            
+            <div class="subsection">
+                <div class="subsection-title">Labels</div>
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="labelPrice">Price ($)</label>
+                        <input type="number" id="labelPrice" step="0.01" value="0" oninput="calculate()">
+                    </div>
+                    <div class="input-group">
+                        <label for="labelQty">Quantity</label>
+                        <input type="number" id="labelQty" value="0" oninput="calculate()">
+                    </div>
+                </div>
+                <div class="cost-output">Cost per label: $<span id="labelPerUnit">0.00</span></div>
+            </div>
+        </div>
+        
+        <!-- Packaging Costs Section -->
+        <div class="section">
+            <h2 class="section-title">Packaging Costs</h2>
+            <p class="section-context">This includes boxes, warning labels, tissue, stickers, etc.</p>
+            
+            <div id="packagingItems">
+                <div class="packaging-item">
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label for="packagingName0">Item Name</label>
+                            <input type="text" id="packagingName0" placeholder="e.g., Boxes" oninput="calculate()">
+                        </div>
+                    </div>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label for="packagingPrice0">Price ($)</label>
+                            <input type="number" id="packagingPrice0" step="0.01" value="0" oninput="calculate()">
+                        </div>
+                        <div class="input-group">
+                            <label for="packagingQty0">Quantity</label>
+                            <input type="number" id="packagingQty0" value="0" oninput="calculate()">
+                        </div>
+                    </div>
+                    <div class="cost-output">Cost per unit: $<span id="packagingPerUnit0">0.00</span></div>
+                </div>
+            </div>
+            
+            <button class="add-item-btn" onclick="addPackagingItem()">+ Add Additional Item</button>
+            <div class="cost-output" style="margin-top: 15px;">Total packaging cost per candle: $<span id="totalPackagingCost">0.00</span></div>
+        </div>
+        
+        <!-- Shipping Costs Section -->
+        <div class="section">
+            <h2 class="section-title">Shipping Costs</h2>
+            <p class="section-context">If you don't charge shipping and need to include that cost and/or additional boxes or packing filler.</p>
+            
+            <div id="shippingItems">
+                <div class="packaging-item">
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label for="shippingName0">Item Name</label>
+                            <input type="text" id="shippingName0" placeholder="e.g., Shipping cost" oninput="calculate()">
+                        </div>
+                    </div>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label for="shippingPrice0">Price ($)</label>
+                            <input type="number" id="shippingPrice0" step="0.01" value="0" oninput="calculate()">
+                        </div>
+                        <div class="input-group">
+                            <label for="shippingQty0">Quantity</label>
+                            <input type="number" id="shippingQty0" value="0" oninput="calculate()">
+                        </div>
+                    </div>
+                    <div class="cost-output">Cost per unit: $<span id="shippingPerUnit0">0.00</span></div>
+                </div>
+            </div>
+            
+            <button class="add-item-btn" onclick="addShippingItem()">+ Add Additional Item</button>
+            <div class="cost-output" style="margin-top: 15px;">Total shipping cost per candle: $<span id="totalShippingCost">0.00</span></div>
+        </div>
+        
+        <!-- Candle Details Section -->
+        <div class="section">
+            <h2 class="section-title">Candle Details</h2>
+            <div class="input-row">
+                <div class="input-group">
+                    <label for="candleSize">Total net fill weight (ounces)</label>
+                    <input type="number" id="candleSize" step="0.1" value="8" oninput="calculate()">
+                    <div class="input-context">Enter total fill weight (wax + fragrance oil)</div>
+                </div>
+                <div class="input-group">
+                    <label for="fragranceLoad">Fragrance load (%)</label>
+                    <input type="number" id="fragranceLoad" step="0.1" value="8" oninput="calculate()">
+                </div>
+            </div>
+            <div class="input-row">
+                <div class="input-group">
+                    <label for="wicksUsed">Wicks per candle</label>
+                    <input type="number" id="wicksUsed" value="1" oninput="calculate()">
+                </div>
+            </div>
+            <div class="cost-output">
+                Wax needed: <span id="waxOzNeeded">0.00</span> oz | 
+                FO needed: <span id="foOzNeeded">0.00</span> oz
+            </div>
+        </div>
+        
+        <!-- Additional Costs Slider -->
+        <div class="section">
+            <h2 class="section-title">Additional Costs</h2>
+            <p class="section-context">For time, misc. expenses, private label, etc.</p>
+            <div class="slider-container">
+                <input type="range" id="additionalCosts" min="0" max="5" step="0.01" value="0" oninput="calculate()">
+                <div class="slider-value">$<span id="additionalValue">0.00</span></div>
+            </div>
+        </div>
+        
+        <!-- Pricing Section -->
+        <div class="section">
+            <h2 class="section-title">Your Pricing</h2>
+            <div class="input-row">
+                <div class="input-group">
+                    <label for="wholesalePrice">Wholesale price ($)</label>
+                    <input type="number" id="wholesalePrice" step="0.01" value="0" oninput="calculate()">
+                    <div class="input-context">Suggested price is at least 2x your cost</div>
+                </div>
+                <div class="input-group">
+                    <label for="retailPrice">Retail price ($)</label>
+                    <input type="number" id="retailPrice" step="0.01" value="0" oninput="calculate()">
+                    <div class="input-context">Suggested price is at least 4x your cost</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Results -->
+        <div class="results">
+            <h2>Your Results</h2>
+            <div class="result-grid">
+                <div class="result-card">
+                    <div class="result-label">Cost Per Candle</div>
+                    <div class="result-value">$<span id="costPerCandle">0.00</span></div>
+                </div>
+                <div class="result-card">
+                    <div class="result-label">Wholesale Profit</div>
+                    <div class="result-value">$<span id="wholesaleProfit">0.00</span></div>
+                </div>
+                <div class="result-card">
+                    <div class="result-label">Retail Profit</div>
+                    <div class="result-value">$<span id="retailProfit">0.00</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let packagingItemCount = 1;
+        let shippingItemCount = 1;
+        
+        function addPackagingItem() {
+            const container = document.getElementById('packagingItems');
+            const newItem = document.createElement('div');
+            newItem.className = 'packaging-item';
+            newItem.id = `packagingItem${packagingItemCount}`;
+            newItem.innerHTML = `
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="packagingName${packagingItemCount}">Item Name</label>
+                        <input type="text" id="packagingName${packagingItemCount}" placeholder="e.g., Tissue paper" oninput="calculate()">
+                    </div>
+                </div>
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="packagingPrice${packagingItemCount}">Price ($)</label>
+                        <input type="number" id="packagingPrice${packagingItemCount}" step="0.01" value="0" oninput="calculate()">
+                    </div>
+                    <div class="input-group">
+                        <label for="packagingQty${packagingItemCount}">Quantity</label>
+                        <input type="number" id="packagingQty${packagingItemCount}" value="0" oninput="calculate()">
+                    </div>
+                </div>
+                <div class="cost-output">Cost per unit: $<span id="packagingPerUnit${packagingItemCount}">0.00</span></div>
+                <button class="remove-btn" onclick="removePackagingItem(${packagingItemCount})">Remove Item</button>
+            `;
+            container.appendChild(newItem);
+            packagingItemCount++;
+        }
+        
+        function removePackagingItem(id) {
+            const item = document.getElementById(`packagingItem${id}`);
+            item.remove();
+            calculate();
+        }
+        
+        function addShippingItem() {
+            const container = document.getElementById('shippingItems');
+            const newItem = document.createElement('div');
+            newItem.className = 'packaging-item';
+            newItem.id = `shippingItem${shippingItemCount}`;
+            newItem.innerHTML = `
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="shippingName${shippingItemCount}">Item Name</label>
+                        <input type="text" id="shippingName${shippingItemCount}" placeholder="e.g., Outer box" oninput="calculate()">
+                    </div>
+                </div>
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="shippingPrice${shippingItemCount}">Price ($)</label>
+                        <input type="number" id="shippingPrice${shippingItemCount}" step="0.01" value="0" oninput="calculate()">
+                    </div>
+                    <div class="input-group">
+                        <label for="shippingQty${shippingItemCount}">Quantity</label>
+                        <input type="number" id="shippingQty${shippingItemCount}" value="0" oninput="calculate()">
+                    </div>
+                </div>
+                <div class="cost-output">Cost per unit: $<span id="shippingPerUnit${shippingItemCount}">0.00</span></div>
+                <button class="remove-btn" onclick="removeShippingItem(${shippingItemCount})">Remove Item</button>
+            `;
+            container.appendChild(newItem);
+            shippingItemCount++;
+        }
+        
+        function removeShippingItem(id) {
+            const item = document.getElementById(`shippingItem${id}`);
+            item.remove();
+            calculate();
+        }
+        
+        function calculate() {
+            // Get all input values
+            const waxPrice = parseFloat(document.getElementById('waxPrice').value) || 0;
+            const waxWeight = parseFloat(document.getElementById('waxWeight').value) || 0;
+            const vesselPrice = parseFloat(document.getElementById('vesselPrice').value) || 0;
+            const vesselQty = parseFloat(document.getElementById('vesselQty').value) || 0;
+            const wickPrice = parseFloat(document.getElementById('wickPrice').value) || 0;
+            const wickQty = parseFloat(document.getElementById('wickQty').value) || 0;
+            const foPrice = parseFloat(document.getElementById('foPrice').value) || 0;
+            const foOunces = parseFloat(document.getElementById('foOunces').value) || 0;
+            const lidPrice = parseFloat(document.getElementById('lidPrice').value) || 0;
+            const lidQty = parseFloat(document.getElementById('lidQty').value) || 0;
+            const labelPrice = parseFloat(document.getElementById('labelPrice').value) || 0;
+            const labelQty = parseFloat(document.getElementById('labelQty').value) || 0;
+            const candleSize = parseFloat(document.getElementById('candleSize').value) || 0;
+            const fragranceLoad = parseFloat(document.getElementById('fragranceLoad').value) || 0;
+            const wicksUsed = parseFloat(document.getElementById('wicksUsed').value) || 1;
+            const additionalCosts = parseFloat(document.getElementById('additionalCosts').value) || 0;
+            const wholesalePrice = parseFloat(document.getElementById('wholesalePrice').value) || 0;
+            const retailPrice = parseFloat(document.getElementById('retailPrice').value) || 0;
+            
+            // Update additional costs display
+            document.getElementById('additionalValue').textContent = additionalCosts.toFixed(2);
+            
+            // Calculate FO ounces needed (% of total fill)
+            const foOzNeeded = candleSize * (fragranceLoad / 100);
+            
+            // Calculate wax ounces needed (total fill minus FO)
+            const waxOzNeeded = candleSize - foOzNeeded;
+            
+            // Update candle details display
+            document.getElementById('waxOzNeeded').textContent = waxOzNeeded.toFixed(2);
+            document.getElementById('foOzNeeded').textContent = foOzNeeded.toFixed(2);
+            
+            // Calculate per-unit costs
+            const waxPerOz = waxWeight > 0 ? waxPrice / (waxWeight * 16) : 0;
+            const waxCostForCandle = waxPerOz * waxOzNeeded;
+            
+            const vesselPerUnit = vesselQty > 0 ? vesselPrice / vesselQty : 0;
+            const wickPerUnit = wickQty > 0 ? wickPrice / wickQty : 0;
+            const wickCostForCandle = wickPerUnit * wicksUsed;
+            const lidPerUnit = lidQty > 0 ? lidPrice / lidQty : 0;
+            const labelPerUnit = labelQty > 0 ? labelPrice / labelQty : 0;
+            
+            // Calculate fragrance oil cost per candle
+            const foPerOz = foOunces > 0 ? foPrice / foOunces : 0;
+            const foCostForCandle = foPerOz * foOzNeeded;
+            
+            // Update individual cost displays
+            document.getElementById('waxPerOz').textContent = waxPerOz.toFixed(4);
+            document.getElementById('waxPerCandle').textContent = waxCostForCandle.toFixed(2);
+            document.getElementById('vesselPerUnit').textContent = vesselPerUnit.toFixed(2);
+            document.getElementById('wickPerUnit').textContent = wickPerUnit.toFixed(2);
+            document.getElementById('wickPerCandle').textContent = wickCostForCandle.toFixed(2);
+            document.getElementById('foPerOz').textContent = foPerOz.toFixed(4);
+            document.getElementById('foPerCandle').textContent = foCostForCandle.toFixed(2);
+            document.getElementById('lidPerUnit').textContent = lidPerUnit.toFixed(2);
+            document.getElementById('labelPerUnit').textContent = labelPerUnit.toFixed(2);
+            
+            // Calculate packaging costs
+            let totalPackagingCost = 0;
+            for (let i = 0; i < packagingItemCount; i++) {
+                const priceInput = document.getElementById(`packagingPrice${i}`);
+                const qtyInput = document.getElementById(`packagingQty${i}`);
+                const perUnitSpan = document.getElementById(`packagingPerUnit${i}`);
+                
+                if (priceInput && qtyInput && perUnitSpan) {
+                    const price = parseFloat(priceInput.value) || 0;
+                    const qty = parseFloat(qtyInput.value) || 0;
+                    const perUnit = qty > 0 ? price / qty : 0;
+                    perUnitSpan.textContent = perUnit.toFixed(2);
+                    totalPackagingCost += perUnit;
+                }
+            }
+            
+            document.getElementById('totalPackagingCost').textContent = totalPackagingCost.toFixed(2);
+            
+            // Calculate shipping costs
+            let totalShippingCost = 0;
+            for (let i = 0; i < shippingItemCount; i++) {
+                const priceInput = document.getElementById(`shippingPrice${i}`);
+                const qtyInput = document.getElementById(`shippingQty${i}`);
+                const perUnitSpan = document.getElementById(`shippingPerUnit${i}`);
+                
+                if (priceInput && qtyInput && perUnitSpan) {
+                    const price = parseFloat(priceInput.value) || 0;
+                    const qty = parseFloat(qtyInput.value) || 0;
+                    const perUnit = qty > 0 ? price / qty : 0;
+                    perUnitSpan.textContent = perUnit.toFixed(2);
+                    totalShippingCost += perUnit;
+                }
+            }
+            
+            document.getElementById('totalShippingCost').textContent = totalShippingCost.toFixed(2);
+            
+            // Total cost per candle
+            const totalCost = waxCostForCandle + vesselPerUnit + wickCostForCandle + 
+                            foCostForCandle + lidPerUnit + labelPerUnit + 
+                            totalPackagingCost + totalShippingCost + additionalCosts;
+            
+            // Calculate profits
+            const wholesaleProfit = wholesalePrice - totalCost;
+            const retailProfit = retailPrice - totalCost;
+            
+            // Update display
+            document.getElementById('costPerCandle').textContent = totalCost.toFixed(2);
+            document.getElementById('wholesaleProfit').textContent = wholesaleProfit.toFixed(2);
+            document.getElementById('retailProfit').textContent = retailProfit.toFixed(2);
+        }
+        
+        // Run calculation on page load
+        calculate();
+    </script>
+</body>
+</html>
